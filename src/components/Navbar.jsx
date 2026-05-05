@@ -57,7 +57,7 @@ const Navbar = () => {
         {/* LEFT — Logo */}
 <Link to="/" style={styles.logoWrap}>
   <img
-    src="/src/assets/logo.png"
+    src="/logo.png"
     alt="Sudarshana Sarees"
     style={styles.logoImg}
   />
@@ -193,7 +193,7 @@ const Navbar = () => {
     {/* Logo in mobile menu */}
     <div style={styles.mobileMenuHeader}>
       <img
-        src="/src/assets/logo.png"
+        src="/logo.png"
         alt="Sudarshana Sarees"
         style={{ height: "55px", width: "auto" }}
       />
