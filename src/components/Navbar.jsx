@@ -5,13 +5,8 @@ import { useCart } from "../context/CartContext";
 import toast from "react-hot-toast";
 
 const categories = [
-  "Silk Sarees",
-  "Cotton Sarees",
-  "Banarasi",
-  "Designer",
-  "Bridal",
-  "Handloom",
-  "Sale",
+  "All Sarees", "Silk", "Banarasi", "Cotton",
+  "Designer", "Bridal", "Handloom", "Sale",
 ];
 
 const Navbar = () => {
@@ -25,10 +20,10 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success("Logged out successfully!");
+      toast.success("Logged out!");
       navigate("/");
       setMenuOpen(false);
-    } catch (error) {
+    } catch {
       toast.error("Failed to logout!");
     }
   };
@@ -43,231 +38,290 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50">
-
-      {/* ===== TOP BANNER ===== */}
-      <div className="bg-[#C9A84C] text-[#5a0000] text-center py-2 px-4 text-xs font-semibold tracking-wide">
-        Free Shipping above ₹999 &nbsp;•&nbsp; Easy 7-Day Returns &nbsp;•&nbsp; Authentic Handpicked Sarees
+    <>
+      {/* ── ANNOUNCEMENT BANNER ── */}
+      <div className="bg-[#8B0000] text-white text-center py-2 px-4 text-xs font-medium tracking-wide">
+        🎉 Free Shipping on orders above ₹999 &nbsp;•&nbsp; Easy 7-Day Returns
       </div>
 
-      {/* ===== MAIN NAVBAR ===== */}
-      <nav className="bg-[#8B0000] px-3 md:px-10 h-16 md:h-20 flex items-center justify-between shadow-lg">
-        {/* LEFT — Logo */}
-        <Link to="/" className="flex-shrink-0">
-          <img
-            src="/logo.png"
-            alt="Sudarshana Sarees"
-            className="h-10 md:h-14 w-auto object-contain"
-          />
-        </Link>
+      {/* ── MAIN HEADER ── */}
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
-        {/* CENTER — Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-          {categories.map((cat) => (
-            <Link
-              key={cat}
-              to={`/?category=${cat}`}
-              className="text-white/80 hover:text-white text-xs font-semibold tracking-widest uppercase border-b-2 border-transparent hover:border-[#C9A84C] pb-1 transition-all duration-200 whitespace-nowrap"
-            >
-              {cat}
-            </Link>
-          ))}
-          {userRole === "admin" && (
-            <Link
-              to="/admin"
-              className="text-[#C9A84C] text-xs font-semibold tracking-widest uppercase"
-            >
-              ADMIN
-            </Link>
-          )}
-        </div>
-
-        {/* RIGHT — Icons */}
-        <div className="flex items-center gap-3">
-
-          {/* Search Icon */}
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="text-white/90 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all"
-            title="Search"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-          </button>
-
-          {/* Login / Account Icon — hidden on mobile */}
-          {currentUser ? (
+          {/* LEFT — Menu + Search */}
+          <div className="flex items-center gap-1">
+            {/* Hamburger */}
             <button
-              onClick={handleLogout}
-              className="hidden md:flex text-white/90 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all"
-              title="Logout"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+              aria-label="Menu"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
+              {menuOpen ? (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2">
+                  <line x1="3" y1="8" x2="21" y2="8" />
+                  <line x1="3" y1="16" x2="21" y2="16" />
+                </svg>
+              )}
+            </button>
+
+            {/* Search */}
+            <button
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+              aria-label="Search"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
               </svg>
             </button>
-          ) : (
-            <Link
-              to="/login"
-              className="hidden md:flex text-white/90 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all"
-              title="Login"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </Link>
-          )}
+          </div>
 
-          {/* Cart Icon */}
-          <Link
-            to="/cart"
-            className="relative text-white/90 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all"
-            title="Cart"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
-            </svg>
-            {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#C9A84C] text-[#5a0000] text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                {totalItems}
-              </span>
-            )}
-          </Link>
-
-          {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden text-white p-2"
-          >
-            {menuOpen ? (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </nav>
-
-      {/* ===== SEARCH BAR ===== */}
-      {searchOpen && (
-        <div className="bg-white px-4 py-3 shadow-md border-b border-gray-100">
-          <form
-            onSubmit={handleSearch}
-            className="flex items-center gap-2 max-w-2xl mx-auto"
-          >
-            <input
-              type="text"
-              placeholder="Search for sarees..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 px-5 py-2.5 border-2 border-[#8B0000] rounded-full text-sm outline-none font-[Poppins]"
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="bg-[#8B0000] text-white px-6 py-2.5 rounded-full text-sm font-semibold"
-            >
-              Search
-            </button>
-            <button
-              type="button"
-              onClick={() => setSearchOpen(false)}
-              className="text-gray-400 hover:text-gray-600 p-2 text-lg"
-            >
-              ✕
-            </button>
-          </form>
-        </div>
-      )}
-
-      {/* ===== MOBILE MENU ===== */}
-      {menuOpen && (
-        <div className="lg:hidden bg-[#6B0000] flex flex-col max-h-[80vh] overflow-y-auto">
-
-          {/* Logo in mobile menu */}
-          <div className="px-6 py-4 border-b border-white/10 flex items-center">
+          {/* CENTER — Logo */}
+          <Link to="/" className="absolute left-1/2 -translate-x-1/2">
             <img
               src="/logo.png"
               alt="Sudarshana Sarees"
-              className="h-12 w-auto"
+              className="h-10 md:h-12 w-auto object-contain"
             />
-          </div>
+          </Link>
 
-          {/* Category Links */}
-          {categories.map((cat) => (
-            <Link
-              key={cat}
-              to={`/?category=${cat}`}
-              className="text-white/90 px-6 py-4 text-sm font-medium border-b border-white/5 hover:bg-white/10 transition-all tracking-wide"
-              onClick={() => setMenuOpen(false)}
-            >
-              {cat}
-            </Link>
-          ))}
-
-          <div className="h-px bg-white/15 my-1" />
-
-          {currentUser ? (
-            <>
-              <Link
-                to="/cart"
-                className="text-white/90 px-6 py-4 text-sm font-medium border-b border-white/5 hover:bg-white/10 transition-all"
-                onClick={() => setMenuOpen(false)}
-              >
-                Cart {totalItems > 0 && `(${totalItems})`}
-              </Link>
-              {userRole === "admin" && (
-                <Link
-                  to="/admin"
-                  className="text-[#C9A84C] px-6 py-4 text-sm font-semibold border-b border-white/5"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Admin Panel
-                </Link>
-              )}
+          {/* RIGHT — Profile + Cart */}
+          <div className="flex items-center gap-1">
+            {/* Profile */}
+            {currentUser ? (
               <button
                 onClick={handleLogout}
-                className="text-white/80 px-6 py-4 text-sm text-left border-b border-white/5 hover:bg-white/10 transition-all"
+                className="p-2 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+                title="Logout"
               >
-                Logout
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
               </button>
-            </>
-          ) : (
-            <>
+            ) : (
               <Link
                 to="/login"
-                className="text-white/90 px-6 py-4 text-sm font-medium border-b border-white/5 hover:bg-white/10 transition-all"
-                onClick={() => setMenuOpen(false)}
+                className="p-2 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+                title="Login"
               >
-                Login
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
               </Link>
-              <div className="px-4 py-3">
-                <Link
-                  to="/signup"
-                  className="block bg-[#C9A84C] text-[#5a0000] text-center py-3 rounded-lg font-bold text-sm"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Sign Up Free
-                </Link>
+            )}
+
+            {/* Cart */}
+            <Link
+              to="/cart"
+              className="relative p-2 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
+              title="Cart"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+              </svg>
+              {totalItems > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-[#8B0000] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+
+            {/* Admin */}
+            {userRole === "admin" && (
+              <Link
+                to="/admin"
+                className="hidden md:flex items-center px-3 py-1.5 bg-[#8B0000] text-white text-xs font-semibold rounded-lg"
+              >
+                Admin
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* ── SEARCH BAR ── */}
+        {searchOpen && (
+          <div className="border-t border-gray-100 bg-white px-4 py-3">
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center gap-2 max-w-xl mx-auto"
+            >
+              <div className="flex-1 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-full px-4 py-2.5 focus-within:border-[#8B0000] transition-colors">
+                <svg className="text-gray-400 flex-shrink-0" width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search sarees..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-transparent outline-none text-sm text-gray-700 w-full"
+                  autoFocus
+                />
               </div>
-            </>
-          )}
+              <button
+                type="submit"
+                className="bg-[#8B0000] text-white px-5 py-2.5 rounded-full text-sm font-semibold flex-shrink-0"
+              >
+                Search
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearchOpen(false)}
+                className="text-gray-400 p-1 flex-shrink-0"
+              >
+                ✕
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* ── DESKTOP NAV LINKS ── */}
+        <div className="hidden md:block border-t border-gray-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex items-center justify-center gap-8 py-2">
+              {categories.map((cat) => (
+                <Link
+                  key={cat}
+                  to={`/?category=${cat}`}
+                  className="text-gray-600 hover:text-[#8B0000] text-xs font-medium tracking-wide transition-colors whitespace-nowrap py-1 border-b-2 border-transparent hover:border-[#8B0000]"
+                >
+                  {cat.toUpperCase()}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* ── MOBILE DRAWER MENU ── */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 flex md:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setMenuOpen(false)}
+          />
+          {/* Drawer */}
+          <div className="relative w-72 bg-white h-full shadow-2xl flex flex-col overflow-y-auto">
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <img src="/logo.png" alt="Sudarshana" className="h-10 w-auto" />
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="p-2 text-gray-500"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Categories */}
+            <div className="flex-1 py-2">
+              <p className="px-5 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                Categories
+              </p>
+              {categories.map((cat) => (
+                <Link
+                  key={cat}
+                  to={`/?category=${cat}`}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center px-5 py-3.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#8B0000] transition-colors border-b border-gray-50"
+                >
+                  {cat}
+                </Link>
+              ))}
+
+              <div className="h-2 bg-gray-50 my-2" />
+
+              <p className="px-5 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                Account
+              </p>
+
+              {currentUser ? (
+                <>
+                  <Link
+                    to="/cart"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between px-5 py-3.5 text-sm text-gray-700 hover:bg-gray-50 border-b border-gray-50"
+                  >
+                    <span>My Cart</span>
+                    {totalItems > 0 && (
+                      <span className="bg-[#8B0000] text-white text-xs px-2 py-0.5 rounded-full">
+                        {totalItems}
+                      </span>
+                    )}
+                  </Link>
+                  {userRole === "admin" && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center px-5 py-3.5 text-sm text-[#8B0000] font-semibold hover:bg-gray-50 border-b border-gray-50"
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center px-5 py-3.5 text-sm text-gray-700 hover:bg-gray-50 border-b border-gray-50"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center px-5 py-3.5 text-sm text-gray-700 hover:bg-gray-50 border-b border-gray-50"
+                  >
+                    Login
+                  </Link>
+                  <div className="px-5 py-4">
+                    <Link
+                      to="/signup"
+                      onClick={() => setMenuOpen(false)}
+                      className="block w-full bg-[#8B0000] text-white text-center py-3 rounded-xl text-sm font-bold"
+                    >
+                      Sign Up Free
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Contact */}
+            <div className="px-5 py-4 border-t border-gray-100 bg-gray-50">
+              <p className="text-xs text-gray-500 mb-1">Need help?</p>
+              <a
+                href="https://wa.me/917905907624"
+                className="text-sm font-semibold text-[#25D366]"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                💬 Chat on WhatsApp
+              </a>
+            </div>
+          </div>
         </div>
       )}
-    </header>
+    </>
   );
 };
 
