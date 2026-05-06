@@ -26,7 +26,7 @@ const Signup = () => {
     setLoading(true);
     try {
       await signup(email, password, name);
-      toast.success("Welcome to Sudarshana Sarees! 🎉");
+      toast.success("Welcome to Sudarshana Sarees!");
       navigate("/");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -38,393 +38,157 @@ const Signup = () => {
     setLoading(false);
   };
 
+  const strength =
+    password.length === 0
+      ? 0
+      : password.length < 6
+      ? 1
+      : password.length < 10
+      ? 2
+      : 3;
+
+  const strengthColor = ["bg-gray-200", "bg-red-400", "bg-yellow-400", "bg-green-500"][strength];
+  const strengthText = ["", "Weak", "Medium", "Strong"][strength];
+
   return (
-    <div style={styles.container}>
-      {/* Left Side — Decorative */}
-      <div style={styles.leftPanel}>
-        <div style={styles.leftContent}>
-          <p style={styles.leftTag}>🎉 Join Us Today</p>
-          <h2 style={styles.leftTitle}>
-            Begin Your<br />Saree Journey
+    <div className="min-h-screen flex">
+      {/* Left Panel */}
+      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-[#8B0000] via-[#6B0000] to-[#2a0000] flex-col justify-center px-16 relative overflow-hidden">
+        <div className="relative z-10">
+          <img src="/logo.png" alt="Sudarshana Sarees" className="h-24 w-auto mb-10" />
+          <h2 className="font-['Playfair_Display'] text-4xl text-white font-bold mb-4 leading-tight">
+            Begin Your <br />
+            <span className="text-[#C9A84C]">Saree Journey</span>
           </h2>
-          <p style={styles.leftSubtitle}>
-            Create your free account and explore thousands
-            of handpicked premium sarees
+          <p className="text-white/70 text-base leading-relaxed mb-10 max-w-sm">
+            Create your free account and explore thousands of handpicked premium sarees.
           </p>
-          <div style={styles.benefits}>
-            <div style={styles.benefitItem}>
-              <span style={styles.benefitIcon}>✓</span>
-              <span>Access exclusive collections</span>
-            </div>
-            <div style={styles.benefitItem}>
-              <span style={styles.benefitIcon}>✓</span>
-              <span>Track your orders easily</span>
-            </div>
-            <div style={styles.benefitItem}>
-              <span style={styles.benefitIcon}>✓</span>
-              <span>Save items to wishlist</span>
-            </div>
-            <div style={styles.benefitItem}>
-              <span style={styles.benefitIcon}>✓</span>
-              <span>Get exclusive member discounts</span>
-            </div>
+          <div className="flex flex-col gap-4">
+            {[
+              "Access exclusive collections",
+              "Track your orders easily",
+              "Get member only discounts",
+              "Easy returns and refunds",
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-3 text-white/80 text-sm">
+                <span className="w-6 h-6 rounded-full bg-[#C9A84C] flex items-center justify-center text-[#5a0000] text-xs font-bold flex-shrink-0">
+                  ✓
+                </span>
+                {item}
+              </div>
+            ))}
           </div>
         </div>
-        <div style={styles.decorativeCircle1} />
-        <div style={styles.decorativeCircle2} />
-        <div style={styles.decorativeText}>🪷</div>
+        <div className="absolute top-0 right-0 w-64 h-64 rounded-full border border-white/10 -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full border border-white/10 translate-y-1/2 -translate-x-1/2" />
       </div>
 
-      {/* Right Side — Form */}
-      <div style={styles.rightPanel}>
-        <div style={styles.card}>
-          <div style={styles.logoArea}>
-            <span style={styles.logoEmoji}>🛍️</span>
-            <h1 style={styles.logoText}>Sudarshana Sarees</h1>
+      {/* Right Panel */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-gray-50">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden flex justify-center mb-8">
+            <img src="/logo.png" alt="Sudarshana Sarees" className="h-20 w-auto" />
           </div>
 
-          <h2 style={styles.title}>Create Your Account</h2>
-          <p style={styles.subtitle}>
-            Already have an account?{" "}
-            <Link to="/login" style={styles.link}>
-              Login here
-            </Link>
-          </p>
+          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
+            <h2 className="font-['Playfair_Display'] text-2xl text-gray-800 font-bold mb-1">
+              Create Your Account
+            </h2>
+            <p className="text-gray-500 text-sm mb-8">
+              Already have an account?{" "}
+              <Link to="/login" className="text-[#8B0000] font-bold hover:underline">
+                Login here
+              </Link>
+            </p>
 
-          <form onSubmit={handleSignup} style={styles.form}>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>👤 Full Name</label>
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                style={styles.input}
-                required
-              />
-            </div>
-
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>📧 Email Address</label>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={styles.input}
-                required
-              />
-            </div>
-
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>🔒 Password</label>
-              <div style={styles.passwordContainer}>
+            <form onSubmit={handleSignup} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-semibold text-gray-600">Full Name</label>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Minimum 6 characters"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={styles.passwordInput}
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={styles.eyeBtn}
-                >
-                  {showPassword ? "🙈" : "👁️"}
-                </button>
               </div>
-            </div>
 
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>🔒 Confirm Password</label>
-              <input
-                type="password"
-                placeholder="Re-enter your password"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                style={styles.input}
-                required
-              />
-            </div>
-
-            {/* Password strength indicator */}
-            {password.length > 0 && (
-              <div style={styles.strengthBar}>
-                <div
-                  style={{
-                    ...styles.strengthFill,
-                    width:
-                      password.length < 6
-                        ? "30%"
-                        : password.length < 10
-                        ? "60%"
-                        : "100%",
-                    backgroundColor:
-                      password.length < 6
-                        ? "#ff4444"
-                        : password.length < 10
-                        ? "#FFD700"
-                        : "green",
-                  }}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-semibold text-gray-600">Email Address</label>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                  required
                 />
-                <span style={styles.strengthText}>
-                  {password.length < 6
-                    ? "Weak"
-                    : password.length < 10
-                    ? "Medium"
-                    : "Strong"}{" "}
-                  password
-                </span>
               </div>
-            )}
 
-            <button
-              type="submit"
-              style={styles.button}
-              disabled={loading}
-            >
-              {loading ? "Creating Account..." : "Create Account →"}
-            </button>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-semibold text-gray-600">Password</label>
+                <div className="flex items-center border border-gray-200 rounded-xl bg-gray-50 focus-within:border-[#8B0000] focus-within:ring-2 focus-within:ring-[#8B0000]/10 transition-all overflow-hidden">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Minimum 6 characters"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="flex-1 px-4 py-3 text-sm outline-none bg-transparent"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="px-4 text-gray-400"
+                  >
+                    {showPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
+                {password.length > 0 && (
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${strengthColor}`}
+                        style={{ width: `${(strength / 3) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-gray-500">{strengthText}</span>
+                  </div>
+                )}
+              </div>
 
-            <p style={styles.terms}>
-              By signing up you agree to our{" "}
-              <span style={styles.termsLink}>Terms of Service</span> and{" "}
-              <span style={styles.termsLink}>Privacy Policy</span>
-            </p>
-          </form>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-semibold text-gray-600">Confirm Password</label>
+                <input
+                  type="password"
+                  placeholder="Re-enter your password"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-[#8B0000] text-white py-3.5 rounded-xl font-bold text-sm tracking-wide hover:bg-[#5a0000] transition-all disabled:opacity-70 mt-2"
+              >
+                {loading ? "Creating Account..." : "Create Account"}
+              </button>
+
+              <p className="text-center text-xs text-gray-400">
+                By signing up you agree to our{" "}
+                <span className="text-[#8B0000] cursor-pointer">Terms of Service</span>
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    display: "flex",
-  },
-  leftPanel: {
-    flex: 1,
-    background:
-      "linear-gradient(135deg, #8B0000 0%, #6B0000 60%, #4a0000 100%)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "3rem",
-    position: "relative",
-    overflow: "hidden",
-  },
-  leftContent: {
-    color: "white",
-    zIndex: 1,
-    maxWidth: "400px",
-  },
-  leftTag: {
-    backgroundColor: "rgba(255,215,0,0.2)",
-    color: "#FFD700",
-    display: "inline-block",
-    padding: "0.3rem 1rem",
-    borderRadius: "20px",
-    fontSize: "0.9rem",
-    marginBottom: "1.5rem",
-    fontWeight: "600",
-    border: "1px solid rgba(255,215,0,0.3)",
-  },
-  leftTitle: {
-    fontSize: "3rem",
-    fontWeight: "700",
-    fontFamily: "'Playfair Display', serif",
-    lineHeight: 1.2,
-    marginBottom: "1rem",
-  },
-  leftSubtitle: {
-    fontSize: "1rem",
-    opacity: 0.85,
-    lineHeight: 1.7,
-    marginBottom: "2rem",
-  },
-  benefits: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.8rem",
-  },
-  benefitItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.8rem",
-    fontSize: "0.95rem",
-    opacity: 0.9,
-  },
-  benefitIcon: {
-    backgroundColor: "#FFD700",
-    color: "#8B0000",
-    width: "20px",
-    height: "20px",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "0.75rem",
-    fontWeight: "bold",
-    flexShrink: 0,
-  },
-  decorativeCircle1: {
-    position: "absolute",
-    width: "300px",
-    height: "300px",
-    borderRadius: "50%",
-    border: "2px solid rgba(255,255,255,0.1)",
-    top: "-100px",
-    right: "-100px",
-  },
-  decorativeCircle2: {
-    position: "absolute",
-    width: "200px",
-    height: "200px",
-    borderRadius: "50%",
-    border: "2px solid rgba(255,255,255,0.1)",
-    bottom: "-50px",
-    left: "-50px",
-  },
-  decorativeText: {
-    position: "absolute",
-    fontSize: "10rem",
-    opacity: 0.07,
-    bottom: "5%",
-    right: "5%",
-  },
-  rightPanel: {
-    flex: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "2rem",
-    backgroundColor: "#FFF8F0",
-    overflowY: "auto",
-  },
-  card: {
-    backgroundColor: "white",
-    padding: "2.5rem",
-    borderRadius: "20px",
-    boxShadow: "0 4px 30px rgba(0,0,0,0.08)",
-    width: "100%",
-    maxWidth: "420px",
-  },
-  logoArea: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    marginBottom: "1.5rem",
-  },
-  logoEmoji: {
-    fontSize: "1.8rem",
-  },
-  logoText: {
-    color: "#8B0000",
-    fontSize: "1.1rem",
-    fontFamily: "'Playfair Display', serif",
-    fontWeight: "700",
-  },
-  title: {
-    color: "#333",
-    fontSize: "1.6rem",
-    marginBottom: "0.5rem",
-    fontFamily: "'Playfair Display', serif",
-  },
-  subtitle: {
-    color: "#888",
-    fontSize: "0.9rem",
-    marginBottom: "1.5rem",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1.1rem",
-  },
-  inputGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.5rem",
-  },
-  label: {
-    color: "#555",
-    fontWeight: "600",
-    fontSize: "0.9rem",
-  },
-  input: {
-    padding: "0.9rem 1rem",
-    borderRadius: "10px",
-    border: "1.5px solid #eee",
-    fontSize: "1rem",
-    outline: "none",
-    backgroundColor: "#FAFAFA",
-  },
-  passwordContainer: {
-    display: "flex",
-    alignItems: "center",
-    border: "1.5px solid #eee",
-    borderRadius: "10px",
-    backgroundColor: "#FAFAFA",
-    overflow: "hidden",
-  },
-  passwordInput: {
-    flex: 1,
-    padding: "0.9rem 1rem",
-    border: "none",
-    fontSize: "1rem",
-    outline: "none",
-    backgroundColor: "transparent",
-  },
-  eyeBtn: {
-    backgroundColor: "transparent",
-    border: "none",
-    padding: "0.9rem",
-    cursor: "pointer",
-    fontSize: "1rem",
-  },
-  strengthBar: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.3rem",
-  },
-  strengthFill: {
-    height: "4px",
-    borderRadius: "4px",
-    transition: "all 0.3s ease",
-  },
-  strengthText: {
-    fontSize: "0.8rem",
-    color: "#888",
-  },
-  button: {
-    backgroundColor: "#8B0000",
-    color: "white",
-    padding: "1rem",
-    border: "none",
-    borderRadius: "10px",
-    fontSize: "1rem",
-    cursor: "pointer",
-    fontWeight: "700",
-    letterSpacing: "0.5px",
-  },
-  terms: {
-    fontSize: "0.8rem",
-    color: "#aaa",
-    textAlign: "center",
-    lineHeight: 1.6,
-  },
-  termsLink: {
-    color: "#8B0000",
-    cursor: "pointer",
-    fontWeight: "600",
-  },
-  link: {
-    color: "#8B0000",
-    fontWeight: "700",
-    textDecoration: "none",
-  },
 };
 
 export default Signup;

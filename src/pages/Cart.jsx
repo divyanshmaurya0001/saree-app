@@ -9,23 +9,30 @@ const Cart = () => {
 
   const handleRemove = (id, name) => {
     removeFromCart(id);
-    toast.success(`${name} removed from cart!`);
+    toast.success(`${name} removed!`);
   };
+
+  const shipping = totalPrice >= 999 ? 0 : 99;
+  const finalTotal = totalPrice + shipping;
 
   if (cartItems.length === 0) {
     return (
-      <div style={styles.emptyContainer}>
-        <div style={styles.emptyBox}>
-          <div style={styles.emptyIconWrapper}>
-            <span style={styles.emptyIcon}>🛒</span>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="text-center">
+          <div className="w-28 h-28 bg-white rounded-full shadow-md flex items-center justify-center mx-auto mb-6">
+            <span className="text-5xl">🛒</span>
           </div>
-          <h2 style={styles.emptyTitle}>Your Cart is Empty!</h2>
-          <p style={styles.emptySubtitle}>
-            Looks like you haven't added any sarees yet.
-            Explore our beautiful collection!
+          <h2 className="font-['Playfair_Display'] text-2xl text-[#8B0000] mb-3">
+            Your Cart is Empty!
+          </h2>
+          <p className="text-gray-500 text-sm mb-8 max-w-sm mx-auto">
+            Looks like you haven't added any sarees yet. Explore our beautiful collection!
           </p>
-          <Link to="/" style={styles.shopBtn}>
-            ✨ Explore Collection
+          <Link
+            to="/"
+            className="bg-[#8B0000] text-white px-8 py-3.5 rounded-full font-bold text-sm hover:bg-[#5a0000] transition-all inline-block"
+          >
+            Explore Collection
           </Link>
         </div>
       </div>
@@ -33,507 +40,184 @@ const Cart = () => {
   }
 
   return (
-    <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>Shopping Cart 🛒</h1>
-          <p style={styles.subtitle}>
-            {cartItems.length} item(s) in your cart
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="font-['Playfair_Display'] text-2xl md:text-3xl text-[#8B0000] font-bold">
+              Shopping Cart
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">
+              {cartItems.length} item(s) in your cart
+            </p>
+          </div>
+          <button
+            onClick={clearCart}
+            className="text-red-400 hover:text-red-600 text-sm font-medium border border-red-200 hover:border-red-400 px-4 py-2 rounded-lg transition-all"
+          >
+            Clear All
+          </button>
         </div>
-        <button onClick={clearCart} style={styles.clearBtn}>
-          🗑️ Clear All
-        </button>
-      </div>
 
-      <div style={styles.layout}>
-        {/* Cart Items */}
-        <div style={styles.itemsSection}>
-          {cartItems.map((item) => (
-            <div key={item.id} style={styles.cartCard}>
-              {/* Product Image */}
-              <div style={styles.imageWrapper}>
+        <div className="flex flex-col lg:flex-row gap-6">
+
+          {/* Cart Items */}
+          <div className="flex-1 flex flex-col gap-4">
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white rounded-2xl p-4 flex gap-4 shadow-sm"
+              >
                 <img
-                  src={
-                    item.images?.[0] ||
-                    "https://via.placeholder.com/120x150?text=Saree"
-                  }
+                  src={item.images?.[0] || "https://via.placeholder.com/100x120?text=Saree"}
                   alt={item.name}
-                  style={styles.itemImage}
+                  className="w-24 h-28 md:w-28 md:h-32 object-cover rounded-xl flex-shrink-0"
                 />
-              </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-['Playfair_Display'] text-[#8B0000] font-semibold text-base mb-1 truncate">
+                    {item.name}
+                  </h3>
+                  <p className="text-gray-400 text-xs mb-3">
+                    ₹{item.price?.toLocaleString()} per piece
+                  </p>
 
-              {/* Product Details */}
-              <div style={styles.itemDetails}>
-                <h3 style={styles.itemName}>{item.name}</h3>
-                <p style={styles.itemPrice}>₹{item.price} per piece</p>
-
-                {/* Quantity Controls */}
-                <div style={styles.quantitySection}>
-                  <span style={styles.qtyLabel}>Quantity:</span>
-                  <div style={styles.quantityControls}>
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50 font-bold"
+                      >
+                        −
+                      </button>
+                      <span className="w-8 text-center text-sm font-bold text-gray-800">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50 font-bold"
+                      >
+                        +
+                      </button>
+                    </div>
                     <button
-                      onClick={() =>
-                        updateQuantity(item.id, item.quantity - 1)
-                      }
-                      style={styles.qtyBtn}
+                      onClick={() => handleRemove(item.id, item.name)}
+                      className="text-red-400 hover:text-red-600 text-xs font-medium transition-colors"
                     >
-                      −
-                    </button>
-                    <span style={styles.quantity}>{item.quantity}</span>
-                    <button
-                      onClick={() =>
-                        updateQuantity(item.id, item.quantity + 1)
-                      }
-                      style={styles.qtyBtn}
-                    >
-                      +
+                      Remove
                     </button>
                   </div>
                 </div>
-              </div>
 
-              {/* Price + Remove */}
-              <div style={styles.itemRight}>
-                <p style={styles.itemTotal}>
-                  ₹{(item.price * item.quantity).toLocaleString()}
-                </p>
-                <button
-                  onClick={() => handleRemove(item.id, item.name)}
-                  style={styles.removeBtn}
-                >
-                  Remove
-                </button>
-                <Link
-                  to={`/product/${item.id}`}
-                  style={styles.viewLink}
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Order Summary */}
-        <div style={styles.summary}>
-          <h2 style={styles.summaryTitle}>Order Summary</h2>
-
-          {/* Items breakdown */}
-          <div style={styles.summaryItems}>
-            {cartItems.map((item) => (
-              <div key={item.id} style={styles.summaryRow}>
-                <span style={styles.summaryItemName}>
-                  {item.name.slice(0, 20)}...
-                  <span style={styles.summaryQty}> × {item.quantity}</span>
-                </span>
-                <span>₹{(item.price * item.quantity).toLocaleString()}</span>
+                {/* Price */}
+                <div className="flex flex-col items-end justify-between flex-shrink-0">
+                  <span className="font-bold text-gray-900 text-base">
+                    ₹{(item.price * item.quantity)?.toLocaleString()}
+                  </span>
+                  <Link
+                    to={`/product/${item.id}`}
+                    className="text-[#8B0000] text-xs underline"
+                  >
+                    View
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
 
-          <div style={styles.divider} />
+          {/* Order Summary */}
+          <div className="lg:w-80 flex flex-col gap-4">
+            <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
+              <h2 className="font-['Playfair_Display'] text-lg text-[#8B0000] font-bold mb-5">
+                Order Summary
+              </h2>
 
-          <div style={styles.summaryRow}>
-            <span style={styles.summaryLabel}>Subtotal</span>
-            <span style={styles.summaryValue}>
-              ₹{totalPrice.toLocaleString()}
-            </span>
-          </div>
+              {/* Items */}
+              <div className="flex flex-col gap-2 mb-4">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex justify-between text-xs text-gray-500">
+                    <span className="truncate max-w-[160px]">
+                      {item.name} x{item.quantity}
+                    </span>
+                    <span>₹{(item.price * item.quantity)?.toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
 
-          <div style={styles.summaryRow}>
-            <span style={styles.summaryLabel}>Shipping</span>
-            <span style={styles.freeShipping}>
-              {totalPrice >= 999 ? "FREE 🎉" : `₹${99}`}
-            </span>
-          </div>
+              <div className="h-px bg-gray-100 mb-4" />
 
-          {totalPrice >= 999 && (
-            <div style={styles.freeShippingBanner}>
-              🎉 You got free shipping!
-            </div>
-          )}
+              <div className="flex flex-col gap-3 mb-4">
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Subtotal</span>
+                  <span>₹{totalPrice?.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Shipping</span>
+                  <span className={shipping === 0 ? "text-green-600 font-semibold" : ""}>
+                    {shipping === 0 ? "FREE 🎉" : `₹${shipping}`}
+                  </span>
+                </div>
+              </div>
 
-          {totalPrice < 999 && (
-            <div style={styles.shippingProgress}>
-              <p style={styles.progressText}>
-                Add ₹{999 - totalPrice} more for FREE shipping!
-              </p>
-              <div style={styles.progressBar}>
-                <div
-                  style={{
-                    ...styles.progressFill,
-                    width: `${Math.min((totalPrice / 999) * 100, 100)}%`,
-                  }}
-                />
+              {/* Shipping progress */}
+              {totalPrice < 999 && (
+                <div className="bg-orange-50 rounded-xl p-3 mb-4">
+                  <p className="text-xs text-orange-700 mb-1.5">
+                    Add ₹{999 - totalPrice} more for FREE shipping!
+                  </p>
+                  <div className="h-2 bg-orange-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-orange-400 rounded-full transition-all"
+                      style={{ width: `${(totalPrice / 999) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {totalPrice >= 999 && (
+                <div className="bg-green-50 rounded-xl p-3 mb-4 text-center text-green-700 text-xs font-semibold">
+                  🎉 You got FREE shipping!
+                </div>
+              )}
+
+              <div className="h-px bg-gray-100 mb-4" />
+
+              <div className="flex justify-between font-bold text-base text-gray-900 mb-5">
+                <span>Total</span>
+                <span className="text-[#8B0000]">₹{finalTotal?.toLocaleString()}</span>
+              </div>
+
+              <button
+                onClick={() => navigate("/checkout")}
+                className="w-full bg-[#8B0000] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#5a0000] transition-all mb-3"
+              >
+                Proceed to Checkout
+              </button>
+
+              <Link
+                to="/"
+                className="block text-center text-[#8B0000] text-sm font-medium hover:underline"
+              >
+                Continue Shopping
+              </Link>
+
+              {/* Trust badges */}
+              <div className="flex justify-center gap-4 mt-5 pt-4 border-t border-gray-100">
+                <span className="text-gray-400 text-xs flex items-center gap-1">
+                  🔒 Secure
+                </span>
+                <span className="text-gray-400 text-xs flex items-center gap-1">
+                  🚚 Fast Delivery
+                </span>
               </div>
             </div>
-          )}
-
-          <div style={styles.divider} />
-
-          <div style={styles.totalRow}>
-            <span style={styles.totalLabel}>Total</span>
-            <span style={styles.totalValue}>
-              ₹{(totalPrice + (totalPrice >= 999 ? 0 : 99)).toLocaleString()}
-            </span>
-          </div>
-
-          <button
-            onClick={() => navigate("/checkout")}
-            style={styles.checkoutBtn}
-          >
-            Proceed to Checkout →
-          </button>
-
-          <Link to="/" style={styles.continueBtn}>
-            ← Continue Shopping
-          </Link>
-
-          {/* Trust badges */}
-          <div style={styles.trustBadges}>
-            <div style={styles.badge}>🔒 Secure Checkout</div>
-            <div style={styles.badge}>🚚 Fast Delivery</div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    backgroundColor: "#FFF8F0",
-    padding: "2rem",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: "2rem",
-    flexWrap: "wrap",
-    gap: "1rem",
-  },
-  title: {
-    color: "#8B0000",
-    fontSize: "2rem",
-    fontFamily: "'Playfair Display', serif",
-    marginBottom: "0.3rem",
-  },
-  subtitle: {
-    color: "#888",
-    fontSize: "0.95rem",
-  },
-  clearBtn: {
-    backgroundColor: "transparent",
-    border: "1.5px solid #ff4444",
-    color: "#ff4444",
-    padding: "0.6rem 1.2rem",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "0.9rem",
-    fontWeight: "600",
-  },
-  layout: {
-    display: "grid",
-    gridTemplateColumns: "1fr 360px",
-    gap: "2rem",
-    alignItems: "start",
-  },
-  itemsSection: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-  },
-  cartCard: {
-    backgroundColor: "white",
-    borderRadius: "16px",
-    padding: "1.2rem",
-    display: "flex",
-    gap: "1.2rem",
-    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-    alignItems: "center",
-    transition: "box-shadow 0.2s ease",
-  },
-  imageWrapper: {
-    flexShrink: 0,
-    borderRadius: "12px",
-    overflow: "hidden",
-  },
-  itemImage: {
-    width: "110px",
-    height: "130px",
-    objectFit: "cover",
-    display: "block",
-  },
-  itemDetails: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.5rem",
-  },
-  itemName: {
-    color: "#8B0000",
-    fontSize: "1.1rem",
-    fontFamily: "'Playfair Display', serif",
-  },
-  itemPrice: {
-    color: "#888",
-    fontSize: "0.9rem",
-  },
-  quantitySection: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.8rem",
-    marginTop: "0.3rem",
-  },
-  qtyLabel: {
-    color: "#555",
-    fontSize: "0.9rem",
-    fontWeight: "600",
-  },
-  quantityControls: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    backgroundColor: "#FFF8F0",
-    borderRadius: "8px",
-    padding: "0.2rem",
-    border: "1px solid #eee",
-  },
-  qtyBtn: {
-    backgroundColor: "#8B0000",
-    color: "white",
-    border: "none",
-    width: "28px",
-    height: "28px",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontSize: "1.1rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: "bold",
-  },
-  quantity: {
-    fontSize: "1rem",
-    fontWeight: "700",
-    minWidth: "24px",
-    textAlign: "center",
-    color: "#333",
-  },
-  itemRight: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-    gap: "0.6rem",
-    flexShrink: 0,
-  },
-  itemTotal: {
-    fontSize: "1.3rem",
-    fontWeight: "700",
-    color: "#333",
-  },
-  removeBtn: {
-    backgroundColor: "transparent",
-    border: "1px solid #ff4444",
-    color: "#ff4444",
-    padding: "0.3rem 0.8rem",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontSize: "0.8rem",
-    fontWeight: "600",
-  },
-  viewLink: {
-    color: "#8B0000",
-    fontSize: "0.8rem",
-    textDecoration: "underline",
-    fontWeight: "500",
-  },
-  summary: {
-    backgroundColor: "white",
-    borderRadius: "16px",
-    padding: "1.8rem",
-    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-    position: "sticky",
-    top: "100px",
-  },
-  summaryTitle: {
-    color: "#8B0000",
-    fontSize: "1.3rem",
-    fontFamily: "'Playfair Display', serif",
-    marginBottom: "0.5rem",
-  },
-  summaryItems: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.6rem",
-  },
-  summaryRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    color: "#555",
-    fontSize: "0.9rem",
-  },
-  summaryItemName: {
-    color: "#666",
-    fontSize: "0.85rem",
-  },
-  summaryQty: {
-    color: "#888",
-    fontSize: "0.8rem",
-  },
-  summaryLabel: {
-    color: "#555",
-    fontWeight: "500",
-  },
-  summaryValue: {
-    fontWeight: "600",
-    color: "#333",
-  },
-  freeShipping: {
-    color: "green",
-    fontWeight: "700",
-  },
-  freeShippingBanner: {
-    backgroundColor: "#f0fff0",
-    border: "1px solid green",
-    color: "green",
-    padding: "0.6rem 1rem",
-    borderRadius: "8px",
-    fontSize: "0.85rem",
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  shippingProgress: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.4rem",
-  },
-  progressText: {
-    fontSize: "0.8rem",
-    color: "#888",
-  },
-  progressBar: {
-    backgroundColor: "#eee",
-    borderRadius: "4px",
-    height: "6px",
-    overflow: "hidden",
-  },
-  progressFill: {
-    backgroundColor: "#8B0000",
-    height: "100%",
-    borderRadius: "4px",
-    transition: "width 0.3s ease",
-  },
-  divider: {
-    height: "1px",
-    backgroundColor: "#eee",
-  },
-  totalRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  totalLabel: {
-    fontSize: "1.1rem",
-    fontWeight: "700",
-    color: "#333",
-  },
-  totalValue: {
-    fontSize: "1.4rem",
-    fontWeight: "700",
-    color: "#8B0000",
-  },
-  checkoutBtn: {
-    backgroundColor: "#8B0000",
-    color: "white",
-    border: "none",
-    padding: "1rem",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontSize: "1rem",
-    fontWeight: "700",
-    width: "100%",
-    letterSpacing: "0.5px",
-  },
-  continueBtn: {
-    textAlign: "center",
-    color: "#8B0000",
-    textDecoration: "none",
-    fontSize: "0.9rem",
-    fontWeight: "600",
-  },
-  trustBadges: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "1rem",
-    flexWrap: "wrap",
-  },
-  badge: {
-    backgroundColor: "#FFF8F0",
-    color: "#888",
-    padding: "0.4rem 0.8rem",
-    borderRadius: "20px",
-    fontSize: "0.75rem",
-    border: "1px solid #eee",
-  },
-  emptyContainer: {
-    minHeight: "80vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFF8F0",
-    padding: "2rem",
-  },
-  emptyBox: {
-    textAlign: "center",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "1.2rem",
-    maxWidth: "400px",
-  },
-  emptyIconWrapper: {
-    backgroundColor: "white",
-    width: "120px",
-    height: "120px",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-  },
-  emptyIcon: {
-    fontSize: "3.5rem",
-  },
-  emptyTitle: {
-    color: "#8B0000",
-    fontSize: "1.8rem",
-    fontFamily: "'Playfair Display', serif",
-  },
-  emptySubtitle: {
-    color: "#888",
-    fontSize: "1rem",
-    lineHeight: 1.6,
-  },
-  shopBtn: {
-    backgroundColor: "#8B0000",
-    color: "white",
-    padding: "0.9rem 2.5rem",
-    borderRadius: "30px",
-    textDecoration: "none",
-    fontWeight: "700",
-    fontSize: "1rem",
-  },
 };
 
 export default Cart;

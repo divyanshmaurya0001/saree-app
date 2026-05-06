@@ -12,6 +12,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -33,14 +34,18 @@ const ProductDetail = () => {
   }, [id]);
 
   const handleAddToCart = () => {
-    addToCart(product);
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product);
+    }
     toast.success(`${product.name} added to cart!`);
   };
 
   if (loading) {
     return (
-      <div style={styles.centered}>
-        <p style={styles.loadingText}>Loading product... 🛍️</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-[#8B0000] text-xl font-['Playfair_Display']">
+          Loading...
+        </p>
       </div>
     );
   }
@@ -48,193 +53,159 @@ const ProductDetail = () => {
   if (!product) return null;
 
   return (
-    <div style={styles.container}>
-      <button onClick={() => navigate(-1)} style={styles.backBtn}>
-        ← Back
-      </button>
+    <div className="min-h-screen bg-white">
+      {/* Breadcrumb */}
+      <div className="bg-gray-50 border-b border-gray-100 px-4 py-3">
+        <div className="max-w-6xl mx-auto flex items-center gap-2 text-sm text-gray-500">
+          <button onClick={() => navigate("/")} className="hover:text-[#8B0000] transition-colors">
+            Home
+          </button>
+          <span>/</span>
+          <span className="text-[#8B0000] font-medium truncate">{product.name}</span>
+        </div>
+      </div>
 
-      <div style={styles.productContainer}>
-        {/* Images Section */}
-        <div style={styles.imagesSection}>
-          <img
-            src={
-              product.images?.[selectedImage] ||
-              "https://via.placeholder.com/500x600?text=Saree"
-            }
-            alt={product.name}
-            style={styles.mainImage}
-          />
-          {product.images?.length > 1 && (
-            <div style={styles.thumbnails}>
-              {product.images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`view ${index + 1}`}
-                  style={{
-                    ...styles.thumbnail,
-                    border:
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
+
+          {/* Images Section */}
+          <div className="flex-1">
+            {/* Main Image */}
+            <div className="rounded-2xl overflow-hidden bg-gray-50 mb-4">
+              <img
+                src={
+                  product.images?.[selectedImage] ||
+                  "https://via.placeholder.com/600x700?text=Saree"
+                }
+                alt={product.name}
+                className="w-full h-[400px] md:h-[550px] object-contain"
+              />
+            </div>
+
+            {/* Thumbnails */}
+            {product.images?.length > 1 && (
+              <div className="flex gap-3 overflow-x-auto pb-2">
+                {product.images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`flex-shrink-0 w-20 h-24 rounded-xl overflow-hidden border-2 transition-all ${
                       selectedImage === index
-                        ? "2px solid #8B0000"
-                        : "2px solid transparent",
-                  }}
-                  onClick={() => setSelectedImage(index)}
-                />
+                        ? "border-[#8B0000]"
+                        : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`view ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Details Section */}
+          <div className="flex-1 flex flex-col gap-5">
+            <div>
+              <h1 className="font-['Playfair_Display'] text-2xl md:text-3xl text-gray-900 font-bold mb-2">
+                {product.name}
+              </h1>
+              <div className="flex items-center gap-3">
+                <span className="text-3xl font-bold text-[#8B0000]">
+                  ₹{product.price?.toLocaleString()}
+                </span>
+                <span className="text-green-600 text-sm font-semibold bg-green-50 px-3 py-1 rounded-full">
+                  ✓ In Stock
+                </span>
+              </div>
+            </div>
+
+            <div className="h-px bg-gray-100" />
+
+            {/* Description */}
+            <div>
+              <h3 className="font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">
+                Description
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                {product.description}
+              </p>
+            </div>
+
+            <div className="h-px bg-gray-100" />
+
+            {/* Quantity */}
+            <div>
+              <h3 className="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">
+                Quantity
+              </h3>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-50 text-lg font-bold"
+                  >
+                    −
+                  </button>
+                  <span className="w-12 text-center font-bold text-gray-800">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-50 text-lg font-bold"
+                  >
+                    +
+                  </button>
+                </div>
+                <span className="text-gray-500 text-sm">
+                  Total: ₹{(product.price * quantity)?.toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3 mt-2">
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 border-2 border-[#8B0000] text-[#8B0000] py-3.5 rounded-xl font-bold text-sm hover:bg-[#8B0000] hover:text-white transition-all"
+              >
+                Add to Cart
+              </button>
+              <button
+                onClick={() => {
+                  handleAddToCart();
+                  navigate("/cart");
+                }}
+                className="flex-1 bg-[#8B0000] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#5a0000] transition-all"
+              >
+                Buy Now
+              </button>
+            </div>
+
+            {/* Trust badges */}
+            <div className="grid grid-cols-2 gap-3 mt-2">
+              {[
+                { icon: "🚚", text: "Free Shipping above ₹999" },
+                { icon: "🔄", text: "Easy 7-Day Returns" },
+                { icon: "🔒", text: "Secure Checkout" },
+                { icon: "💎", text: "Premium Quality" },
+              ].map((badge, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 bg-gray-50 rounded-xl p-3 text-xs text-gray-600"
+                >
+                  <span className="text-base">{badge.icon}</span>
+                  <span className="font-medium">{badge.text}</span>
+                </div>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Details Section */}
-        <div style={styles.detailsSection}>
-          <h1 style={styles.productName}>{product.name}</h1>
-          <p style={styles.price}>₹{product.price}</p>
-          <div style={styles.divider} />
-          <h3 style={styles.descTitle}>Description</h3>
-          <p style={styles.description}>{product.description}</p>
-          <div style={styles.divider} />
-          <div style={styles.buttonGroup}>
-            <button onClick={handleAddToCart} style={styles.cartBtn}>
-              🛒 Add to Cart
-            </button>
-            <button
-              onClick={() => {
-                handleAddToCart();
-                navigate("/cart");
-              }}
-              style={styles.buyBtn}
-            >
-              Buy Now
-            </button>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    backgroundColor: "#FFF8F0",
-    padding: "2rem",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  backBtn: {
-    backgroundColor: "transparent",
-    border: "1px solid #8B0000",
-    color: "#8B0000",
-    padding: "0.5rem 1rem",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontSize: "1rem",
-    marginBottom: "2rem",
-  },
-  productContainer: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "3rem",
-    backgroundColor: "white",
-    borderRadius: "12px",
-    padding: "2rem",
-    boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
-  },
-  imagesSection: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-  },
-  mainImage: {
-    width: "100%",
-    height: "500px",
-    objectFit: "contain",
-    borderRadius: "8px",
-    backgroundColor: "#FFF8F0",
-    padding: "0.5rem",
-  },
-  thumbnail: {
-    width: "80px",
-    height: "90px",
-    objectFit: "contain",
-    borderRadius: "6px",
-    cursor: "pointer",
-    backgroundColor: "#FFF8F0",
-    padding: "2px",
-  },
-  thumbnail: {
-    width: "70px",
-    height: "70px",
-    objectFit: "cover",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-  detailsSection: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-  },
-  productName: {
-    fontSize: "2rem",
-    color: "#8B0000",
-    marginBottom: "0.5rem",
-  },
-  price: {
-    fontSize: "1.8rem",
-    fontWeight: "bold",
-    color: "#333",
-  },
-  divider: {
-    height: "1px",
-    backgroundColor: "#eee",
-    margin: "0.5rem 0",
-  },
-  descTitle: {
-    color: "#444",
-    fontSize: "1.1rem",
-  },
-  description: {
-    color: "#666",
-    lineHeight: "1.7",
-    fontSize: "1rem",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "1rem",
-    marginTop: "1rem",
-  },
-  cartBtn: {
-    flex: 1,
-    padding: "1rem",
-    backgroundColor: "transparent",
-    border: "2px solid #8B0000",
-    color: "#8B0000",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "1rem",
-    fontWeight: "bold",
-  },
-  buyBtn: {
-    flex: 1,
-    padding: "1rem",
-    backgroundColor: "#8B0000",
-    border: "none",
-    color: "white",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "1rem",
-    fontWeight: "bold",
-  },
-  centered: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "60vh",
-  },
-  loadingText: {
-    fontSize: "1.5rem",
-    color: "#8B0000",
-  },
 };
 
 export default ProductDetail;

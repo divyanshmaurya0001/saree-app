@@ -11,6 +11,8 @@ const Checkout = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const shipping = totalPrice >= 999 ? 0 : 99;
+  const finalTotal = totalPrice + shipping;
 
   const [form, setForm] = useState({
     fullName: "",
@@ -34,7 +36,7 @@ const Checkout = () => {
         userId: currentUser.uid,
         userEmail: currentUser.email,
         items: cartItems,
-        totalPrice,
+        totalPrice: finalTotal,
         shippingAddress: form,
         status: "pending",
         createdAt: new Date().toISOString(),
@@ -49,311 +51,185 @@ const Checkout = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Checkout 🛍️</h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <h1 className="font-['Playfair_Display'] text-2xl md:text-3xl text-[#8B0000] font-bold mb-8">
+          Checkout
+        </h1>
 
-      <div style={styles.layout}>
-        {/* Shipping Form */}
-        <div style={styles.formSection}>
-          <h2 style={styles.sectionTitle}>Shipping Details</h2>
-          <form onSubmit={handlePlaceOrder} style={styles.form}>
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Full Name</label>
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Enter your full name"
-                value={form.fullName}
-                onChange={handleChange}
-                style={styles.input}
-                required
-              />
+        <div className="flex flex-col lg:flex-row gap-6">
+
+          {/* Shipping Form */}
+          <div className="flex-1">
+            <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+              <h2 className="font-['Playfair_Display'] text-lg text-gray-800 font-bold mb-6">
+                Shipping Details
+              </h2>
+              <form onSubmit={handlePlaceOrder} className="flex flex-col gap-4">
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-semibold text-gray-600">Full Name</label>
+                  <input
+                    type="text"
+                    name="fullName"
+                    placeholder="Enter your full name"
+                    value={form.fullName}
+                    onChange={handleChange}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-semibold text-gray-600">Email Address</label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    value={form.email}
+                    onChange={handleChange}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-semibold text-gray-600">Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    value={form.phone}
+                    onChange={handleChange}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-semibold text-gray-600">Full Address</label>
+                  <textarea
+                    name="address"
+                    placeholder="House no, Street, Area"
+                    value={form.address}
+                    onChange={handleChange}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all resize-none h-20"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-semibold text-gray-600">City</label>
+                    <input
+                      type="text"
+                      name="city"
+                      placeholder="City"
+                      value={form.city}
+                      onChange={handleChange}
+                      className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                      required
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-semibold text-gray-600">State</label>
+                    <input
+                      type="text"
+                      name="state"
+                      placeholder="State"
+                      value={form.state}
+                      onChange={handleChange}
+                      className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-semibold text-gray-600">Pincode</label>
+                  <input
+                    type="text"
+                    name="pincode"
+                    placeholder="Enter pincode"
+                    value={form.pincode}
+                    onChange={handleChange}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/10 bg-gray-50 transition-all"
+                    required
+                  />
+                </div>
+
+                <div className="bg-[#8B0000]/5 border border-[#8B0000]/20 rounded-xl p-4 text-center">
+                  <p className="text-[#8B0000] text-sm font-medium">
+                    💳 Online payment coming soon via Razorpay
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-[#8B0000] text-white py-4 rounded-xl font-bold text-base hover:bg-[#5a0000] transition-all disabled:opacity-70 mt-2"
+                >
+                  {loading ? "Placing Order..." : "Place Order"}
+                </button>
+              </form>
             </div>
-
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Email Address</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                value={form.email}
-                onChange={handleChange}
-                style={styles.input}
-                required
-              />
-            </div>
-
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Enter your phone number"
-                value={form.phone}
-                onChange={handleChange}
-                style={styles.input}
-                required
-              />
-            </div>
-
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Full Address</label>
-              <textarea
-                name="address"
-                placeholder="House no, Street, Area"
-                value={form.address}
-                onChange={handleChange}
-                style={styles.textarea}
-                required
-              />
-            </div>
-
-            <div style={styles.row}>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>City</label>
-                <input
-                  type="text"
-                  name="city"
-                  placeholder="City"
-                  value={form.city}
-                  onChange={handleChange}
-                  style={styles.input}
-                  required
-                />
-              </div>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>State</label>
-                <input
-                  type="text"
-                  name="state"
-                  placeholder="State"
-                  value={form.state}
-                  onChange={handleChange}
-                  style={styles.input}
-                  required
-                />
-              </div>
-            </div>
-
-            <div style={styles.inputGroup}>
-              <label style={styles.label}>Pincode</label>
-              <input
-                type="text"
-                name="pincode"
-                placeholder="Enter pincode"
-                value={form.pincode}
-                onChange={handleChange}
-                style={styles.input}
-                required
-              />
-            </div>
-
-            {/* Razorpay Ready Button */}
-            <button
-              type="submit"
-              style={styles.orderBtn}
-              disabled={loading}
-            >
-              {loading ? "Placing Order..." : "Place Order ✓"}
-            </button>
-          </form>
-        </div>
-
-        {/* Order Summary */}
-        <div style={styles.summary}>
-          <h2 style={styles.sectionTitle}>Order Summary</h2>
-          {cartItems.map((item) => (
-            <div key={item.id} style={styles.summaryItem}>
-              <img
-                src={
-                  item.images?.[0] ||
-                  "https://via.placeholder.com/60x70?text=Saree"
-                }
-                alt={item.name}
-                style={styles.summaryImage}
-              />
-              <div style={styles.summaryItemDetails}>
-                <p style={styles.summaryItemName}>{item.name}</p>
-                <p style={styles.summaryItemQty}>Qty: {item.quantity}</p>
-              </div>
-              <p style={styles.summaryItemPrice}>
-                ₹{item.price * item.quantity}
-              </p>
-            </div>
-          ))}
-
-          <div style={styles.divider} />
-
-          <div style={styles.summaryRow}>
-            <span>Subtotal</span>
-            <span>₹{totalPrice}</span>
-          </div>
-          <div style={styles.summaryRow}>
-            <span>Shipping</span>
-            <span style={{ color: "green" }}>FREE</span>
           </div>
 
-          <div style={styles.divider} />
+          {/* Order Summary */}
+          <div className="lg:w-80">
+            <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
+              <h2 className="font-['Playfair_Display'] text-lg text-[#8B0000] font-bold mb-5">
+                Order Summary
+              </h2>
 
-          <div style={styles.summaryTotal}>
-            <span>Total</span>
-            <span>₹{totalPrice}</span>
-          </div>
+              <div className="flex flex-col gap-3 mb-4">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3">
+                    <img
+                      src={item.images?.[0] || "https://via.placeholder.com/60?text=S"}
+                      alt={item.name}
+                      className="w-12 h-14 object-cover rounded-lg flex-shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-gray-800 truncate">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                    </div>
+                    <span className="text-xs font-bold text-gray-900 flex-shrink-0">
+                      ₹{(item.price * item.quantity)?.toLocaleString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
 
-          {/* Razorpay note */}
-          <div style={styles.paymentNote}>
-            <p style={styles.paymentNoteText}>
-              💳 Online payment coming soon via Razorpay
-            </p>
+              <div className="h-px bg-gray-100 mb-4" />
+
+              <div className="flex flex-col gap-2.5 mb-4">
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Subtotal</span>
+                  <span>₹{totalPrice?.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Shipping</span>
+                  <span className={shipping === 0 ? "text-green-600 font-semibold" : ""}>
+                    {shipping === 0 ? "FREE" : `₹${shipping}`}
+                  </span>
+                </div>
+              </div>
+
+              <div className="h-px bg-gray-100 mb-4" />
+
+              <div className="flex justify-between font-bold text-base text-gray-900">
+                <span>Total</span>
+                <span className="text-[#8B0000]">₹{finalTotal?.toLocaleString()}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    backgroundColor: "#FFF8F0",
-    padding: "2rem",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  title: {
-    color: "#8B0000",
-    fontSize: "2rem",
-    marginBottom: "2rem",
-  },
-  layout: {
-    display: "grid",
-    gridTemplateColumns: "1fr 380px",
-    gap: "2rem",
-    alignItems: "start",
-  },
-  formSection: {
-    backgroundColor: "white",
-    borderRadius: "12px",
-    padding: "2rem",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-  },
-  sectionTitle: {
-    color: "#8B0000",
-    fontSize: "1.3rem",
-    marginBottom: "1.5rem",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1.2rem",
-  },
-  inputGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.4rem",
-    flex: 1,
-  },
-  label: {
-    color: "#444",
-    fontWeight: "bold",
-    fontSize: "0.9rem",
-  },
-  input: {
-    padding: "0.8rem",
-    borderRadius: "8px",
-    border: "1px solid #ddd",
-    fontSize: "1rem",
-    outline: "none",
-  },
-  textarea: {
-    padding: "0.8rem",
-    borderRadius: "8px",
-    border: "1px solid #ddd",
-    fontSize: "1rem",
-    outline: "none",
-    minHeight: "80px",
-    resize: "vertical",
-  },
-  row: {
-    display: "flex",
-    gap: "1rem",
-  },
-  orderBtn: {
-    backgroundColor: "#8B0000",
-    color: "white",
-    border: "none",
-    padding: "1rem",
-    borderRadius: "8px",
-    fontSize: "1.1rem",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginTop: "0.5rem",
-  },
-  summary: {
-    backgroundColor: "white",
-    borderRadius: "12px",
-    padding: "1.5rem",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-  },
-  summaryItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.8rem",
-  },
-  summaryImage: {
-    width: "60px",
-    height: "70px",
-    objectFit: "cover",
-    borderRadius: "6px",
-  },
-  summaryItemDetails: {
-    flex: 1,
-  },
-  summaryItemName: {
-    color: "#333",
-    fontSize: "0.95rem",
-    fontWeight: "bold",
-  },
-  summaryItemQty: {
-    color: "#888",
-    fontSize: "0.85rem",
-  },
-  summaryItemPrice: {
-    fontWeight: "bold",
-    color: "#333",
-  },
-  divider: {
-    height: "1px",
-    backgroundColor: "#eee",
-  },
-  summaryRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    color: "#555",
-    fontSize: "1rem",
-  },
-  summaryTotal: {
-    display: "flex",
-    justifyContent: "space-between",
-    fontWeight: "bold",
-    fontSize: "1.2rem",
-    color: "#333",
-  },
-  paymentNote: {
-    backgroundColor: "#FFF8F0",
-    borderRadius: "8px",
-    padding: "0.8rem",
-    border: "1px dashed #8B0000",
-  },
-  paymentNoteText: {
-    color: "#8B0000",
-    fontSize: "0.85rem",
-    textAlign: "center",
-    margin: 0,
-  },
 };
 
 export default Checkout;
