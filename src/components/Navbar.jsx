@@ -51,14 +51,13 @@ const Navbar = () => {
       </div>
 
       {/* ===== MAIN NAVBAR ===== */}
-      <nav className="bg-[#8B0000] px-4 md:px-10 h-20 flex items-center justify-between shadow-lg">
-
+      <nav className="bg-[#8B0000] px-3 md:px-10 h-16 md:h-20 flex items-center justify-between shadow-lg">
         {/* LEFT — Logo */}
         <Link to="/" className="flex-shrink-0">
           <img
             src="/logo.png"
             alt="Sudarshana Sarees"
-            className="h-14 w-auto object-contain"
+            className="h-10 md:h-14 w-auto object-contain"
           />
         </Link>
 

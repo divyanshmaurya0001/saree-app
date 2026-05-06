@@ -81,55 +81,51 @@ const Home = () => {
   return (
     <div className="bg-white">
 
-      {/* ===== HERO ===== */}
-      <div className="bg-gradient-to-br from-[#8B0000] via-[#6B0000] to-[#2a0000] text-white px-6 py-20 md:py-32 relative overflow-hidden">
-        <div className="max-w-3xl relative z-10">
-          <span className="inline-block bg-[#C9A84C]/20 text-[#C9A84C] border border-[#C9A84C]/40 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase mb-6">
+     {/* ===== HERO ===== */}
+      <div className="bg-gradient-to-br from-[#8B0000] via-[#6B0000] to-[#2a0000] text-white px-5 py-14 md:py-28 relative overflow-hidden text-center md:text-left">
+        <div className="max-w-2xl mx-auto md:mx-0 relative z-10">
+          <span className="inline-block bg-[#C9A84C]/20 text-[#C9A84C] border border-[#C9A84C]/40 px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase mb-4">
             New Collection 2025
           </span>
-          <h1 className="font-['Playfair_Display'] text-4xl md:text-6xl font-bold leading-tight mb-6">
-            Elegance Woven in <br />
+          <h1 className="font-['Playfair_Display'] text-3xl md:text-5xl font-bold leading-tight mb-4">
+            Elegance Woven in{" "}
             <span className="text-[#C9A84C]">Every Thread</span>
           </h1>
-          <p className="text-white/80 text-base md:text-lg mb-8 max-w-xl leading-relaxed">
+          <p className="text-white/80 text-sm md:text-base mb-7 leading-relaxed max-w-md mx-auto md:mx-0">
             Discover our handpicked collection of premium sarees —
             crafted for the modern Indian woman.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex gap-3 justify-center md:justify-start flex-wrap">
             <a
               href="#collection"
-              className="bg-[#C9A84C] text-[#5a0000] px-8 py-3.5 rounded-full font-bold text-sm tracking-wide hover:bg-[#f0d080] transition-all"
+              className="bg-[#C9A84C] text-[#5a0000] px-6 py-3 rounded-full font-bold text-sm hover:bg-[#f0d080] transition-all"
             >
               Shop Now
             </a>
             <a
               href="#occasions"
-              className="border-2 border-white/40 text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:border-white hover:bg-white/10 transition-all"
+              className="border border-white/50 text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-white/10 transition-all"
             >
               Browse Occasions
             </a>
           </div>
         </div>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[20rem] opacity-[0.03] pointer-events-none select-none">
-          🪷
-        </div>
       </div>
 
       {/* ===== FEATURES BAR ===== */}
-      <div className="bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-6 overflow-x-auto scrollbar-hide">
+      <div className="bg-white border-b border-gray-100 shadow-sm overflow-x-auto">
+        <div className="flex items-center gap-0 min-w-max mx-auto">
           {[
             { icon: "🚚", text: "Free Shipping above ₹999" },
             { icon: "💎", text: "Premium Quality" },
             { icon: "🔄", text: "Easy 7-Day Returns" },
             { icon: "🔒", text: "Secure Payments" },
-            { icon: "📞", text: "24/7 Support" },
           ].map((f, i) => (
             <div
               key={i}
-              className="flex items-center gap-2.5 text-gray-600 text-sm font-medium flex-shrink-0"
+              className="flex items-center gap-2 text-gray-600 text-xs font-medium px-4 py-3 border-r border-gray-100 last:border-r-0 flex-shrink-0"
             >
-              <span className="text-xl">{f.icon}</span>
+              <span className="text-base">{f.icon}</span>
               <span className="whitespace-nowrap">{f.text}</span>
             </div>
           ))}
@@ -154,22 +150,31 @@ const Home = () => {
           </div>
 
           {/* Category Pills */}
-          <div className="flex gap-2 overflow-x-auto pb-3 mb-6 scrollbar-hide">
+          <div
+            className="flex gap-2 mb-6 pb-2"
+            style={{
+              overflowX: "auto",
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition-all ${
+                style={{ flexShrink: 0 }}
+                className={`px-4 py-2 rounded-full text-xs font-semibold border transition-all whitespace-nowrap ${
                   activeCategory === cat
                     ? "bg-[#8B0000] text-white border-[#8B0000]"
-                    : "bg-white text-[#8B0000] border-[#8B0000] hover:bg-[#8B0000] hover:text-white"
+                    : "bg-white text-[#8B0000] border-[#8B0000]"
                 }`}
               >
                 {cat}
               </button>
             ))}
           </div>
-
+          
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded-full px-5 py-3 shadow-sm border border-gray-200 max-w-lg mx-auto mb-8 gap-3">
             <span className="text-gray-400">
@@ -215,7 +220,7 @@ const Home = () => {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-5">
               {filtered.map((product, index) => (
                 <div
                   key={product.id}
@@ -230,7 +235,7 @@ const Home = () => {
                           "https://via.placeholder.com/300x400?text=Saree"
                         }
                         alt={product.name}
-                        className="w-full h-52 md:h-72 object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-44 md:h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </Link>
                     {index < 4 && (
@@ -256,7 +261,7 @@ const Home = () => {
                   </div>
 
                   {/* Body */}
-                  <div className="p-3 md:p-4">
+                  <div className="p-2 md:p-4">
                     <Link to={`/product/${product.id}`}>
                       <h3 className="font-['Playfair_Display'] text-[#8B0000] text-sm md:text-base font-semibold mb-1 line-clamp-1">
                         {product.name}
