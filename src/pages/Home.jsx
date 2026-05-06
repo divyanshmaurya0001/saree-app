@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import toast from "react-hot-toast";
 
 const categories = [
-  "All", "Silk", "Banarasi", "Cotton", "Designer", "Bridal", "Handloom", "Georgette", "Chiffon"
+  "All", "Silk", "Banarasi", "Cotton",
+  "Designer", "Bridal", "Handloom", "Georgette",
 ];
 
 const occasions = [
-  { name: "Wedding", bg: "linear-gradient(135deg, #8B0000, #4a0000)" },
-  { name: "Festival", bg: "linear-gradient(135deg, #C9A84C, #8B6914)" },
-  { name: "Party", bg: "linear-gradient(135deg, #4a0060, #2a0040)" },
-  { name: "Casual", bg: "linear-gradient(135deg, #006040, #003020)" },
-  { name: "Office", bg: "linear-gradient(135deg, #003060, #001830)" },
-  { name: "Puja", bg: "linear-gradient(135deg, #8B4000, #4a2000)" },
+  { name: "Wedding", bg: "from-[#8B0000] to-[#4a0000]" },
+  { name: "Festival", bg: "from-[#C9A84C] to-[#8B6914]" },
+  { name: "Party", bg: "from-[#4a0060] to-[#2a0040]" },
+  { name: "Casual", bg: "from-[#006040] to-[#003020]" },
+  { name: "Office", bg: "from-[#003060] to-[#001830]" },
+  { name: "Puja", bg: "from-[#8B4000] to-[#4a2000]" },
 ];
 
 const Home = () => {
@@ -25,6 +26,7 @@ const Home = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [email, setEmail] = useState("");
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -55,7 +57,9 @@ const Home = () => {
   };
 
   const filtered = products.filter((p) => {
-    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = p.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
     const matchCategory =
       activeCategory === "All" ||
       p.name.toLowerCase().includes(activeCategory.toLowerCase()) ||
@@ -65,147 +69,160 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="loading-screen">
-        <p style={{ fontSize: "3rem" }}>🛍️</p>
-        <p className="loading-text">Loading collection...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <span className="text-6xl">🛍️</span>
+        <p className="text-[#8B0000] text-xl font-['Playfair_Display']">
+          Loading collection...
+        </p>
       </div>
     );
   }
 
   return (
-    <div style={{ backgroundColor: "var(--cream)" }}>
+    <div className="bg-white">
 
       {/* ===== HERO ===== */}
-      <div className="hero">
-        <div className="hero-content">
-          <p className="hero-tag">New Collection 2025</p>
-          <h1 className="hero-title">
-            Elegance Woven in<br />
-            <span>Every Thread</span>
+      <div className="bg-gradient-to-br from-[#8B0000] via-[#6B0000] to-[#2a0000] text-white px-6 py-20 md:py-32 relative overflow-hidden">
+        <div className="max-w-3xl relative z-10">
+          <span className="inline-block bg-[#C9A84C]/20 text-[#C9A84C] border border-[#C9A84C]/40 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase mb-6">
+            New Collection 2025
+          </span>
+          <h1 className="font-['Playfair_Display'] text-4xl md:text-6xl font-bold leading-tight mb-6">
+            Elegance Woven in <br />
+            <span className="text-[#C9A84C]">Every Thread</span>
           </h1>
-          <p className="hero-subtitle">
+          <p className="text-white/80 text-base md:text-lg mb-8 max-w-xl leading-relaxed">
             Discover our handpicked collection of premium sarees —
             crafted for the modern Indian woman.
           </p>
-          <div className="hero-buttons">
-            <a href="#collection" className="hero-btn-primary">
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="#collection"
+              className="bg-[#C9A84C] text-[#5a0000] px-8 py-3.5 rounded-full font-bold text-sm tracking-wide hover:bg-[#f0d080] transition-all"
+            >
               Shop Now
             </a>
-            <a href="#occasions" className="hero-btn-secondary">
+            <a
+              href="#occasions"
+              className="border-2 border-white/40 text-white px-8 py-3.5 rounded-full font-semibold text-sm hover:border-white hover:bg-white/10 transition-all"
+            >
               Browse Occasions
             </a>
           </div>
         </div>
-        <div className="hero-decoration">&#127799;</div>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[20rem] opacity-[0.03] pointer-events-none select-none">
+          🪷
+        </div>
       </div>
 
       {/* ===== FEATURES BAR ===== */}
-      <div className="features-bar">
-        {[
-          { icon: "🚚", text: "Free Shipping above ₹999" },
-          { icon: "💎", text: "Premium Quality" },
-          { icon: "🔄", text: "Easy 7-Day Returns" },
-          { icon: "🔒", text: "Secure Payments" },
-          { icon: "📞", text: "24/7 Support" },
-        ].map((f, i) => (
-          <div className="feature-item" key={i}>
-            <div className="feature-icon">{f.icon}</div>
-            <span>{f.text}</span>
-          </div>
-        ))}
+      <div className="bg-white border-b border-gray-100 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-6 overflow-x-auto scrollbar-hide">
+          {[
+            { icon: "🚚", text: "Free Shipping above ₹999" },
+            { icon: "💎", text: "Premium Quality" },
+            { icon: "🔄", text: "Easy 7-Day Returns" },
+            { icon: "🔒", text: "Secure Payments" },
+            { icon: "📞", text: "24/7 Support" },
+          ].map((f, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-2.5 text-gray-600 text-sm font-medium flex-shrink-0"
+            >
+              <span className="text-xl">{f.icon}</span>
+              <span className="whitespace-nowrap">{f.text}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ===== PRODUCTS COLLECTION ===== */}
-      <div
-        style={{ backgroundColor: "var(--cream-dark)" }}
-        id="collection"
-      >
-        <div className="section">
-          <div className="section-header">
-            <p className="section-tag">Handpicked For You</p>
-            <h2 className="section-title">Our Collection</h2>
-            <p className="section-subtitle">
+      {/* ===== COLLECTION ===== */}
+      <div className="bg-gray-50" id="collection">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+
+          {/* Section Header */}
+          <div className="text-center mb-8">
+            <p className="text-[#C9A84C] text-xs font-semibold tracking-[0.2em] uppercase mb-2">
+              Handpicked For You
+            </p>
+            <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-[#8B0000] mb-3">
+              Our Collection
+            </h2>
+            <p className="text-gray-500 text-sm max-w-md mx-auto">
               Each saree is carefully selected for quality and beauty
             </p>
           </div>
 
           {/* Category Pills */}
-          <div className="categories-scroll">
+          <div className="flex gap-2 overflow-x-auto pb-3 mb-6 scrollbar-hide">
             {categories.map((cat) => (
               <button
                 key={cat}
-                className={`category-pill ${activeCategory === cat ? "active" : ""}`}
                 onClick={() => setActiveCategory(cat)}
+                className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition-all ${
+                  activeCategory === cat
+                    ? "bg-[#8B0000] text-white border-[#8B0000]"
+                    : "bg-white text-[#8B0000] border-[#8B0000] hover:bg-[#8B0000] hover:text-white"
+                }`}
               >
                 {cat}
               </button>
             ))}
           </div>
 
-          {/* Search */}
-          <div className="search-container">
-            <span className="search-icon">🔍</span>
+          {/* Search Bar */}
+          <div className="flex items-center bg-white rounded-full px-5 py-3 shadow-sm border border-gray-200 max-w-lg mx-auto mb-8 gap-3">
+            <span className="text-gray-400">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </span>
             <input
               type="text"
               placeholder="Search sarees..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
+              className="flex-1 outline-none text-sm text-gray-700 bg-transparent"
             />
             {search && (
               <button
                 onClick={() => setSearch("")}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                  color: "var(--text-light)",
-                }}
+                className="text-gray-400 hover:text-gray-600 text-lg"
               >
-                &#10005;
+                ✕
               </button>
             )}
           </div>
 
           {/* Products Grid */}
           {filtered.length === 0 ? (
-            <div className="empty-state">
-              <p className="empty-icon">🛍️</p>
-              <h3 className="empty-title">
+            <div className="text-center py-20">
+              <p className="text-6xl mb-4">🛍️</p>
+              <h3 className="font-['Playfair_Display'] text-2xl text-[#8B0000] mb-2">
                 {search ? "No sarees found!" : "No products yet!"}
               </h3>
-              <p className="empty-subtitle">
-                {search
-                  ? "Try a different search term"
-                  : "Check back soon for new arrivals"}
+              <p className="text-gray-500 text-sm mb-6">
+                {search ? "Try a different search term" : "Check back soon!"}
               </p>
               {(search || activeCategory !== "All") && (
                 <button
                   onClick={() => { setSearch(""); setActiveCategory("All"); }}
-                  style={{
-                    marginTop: "1rem",
-                    background: "var(--primary)",
-                    color: "white",
-                    border: "none",
-                    padding: "0.7rem 2rem",
-                    borderRadius: "20px",
-                    cursor: "pointer",
-                    fontWeight: "600",
-                  }}
+                  className="bg-[#8B0000] text-white px-6 py-2.5 rounded-full text-sm font-semibold"
                 >
                   Clear Filters
                 </button>
               )}
             </div>
           ) : (
-            <div className="products-grid">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
               {filtered.map((product, index) => (
-                <div className="product-card" key={product.id}>
-                  {index < 4 && (
-                    <div className="product-badge">New</div>
-                  )}
-                  <div className="product-image-wrap">
+                <div
+                  key={product.id}
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+                >
+                  {/* Image */}
+                  <div className="relative overflow-hidden">
                     <Link to={`/product/${product.id}`}>
                       <img
                         src={
@@ -213,47 +230,75 @@ const Home = () => {
                           "https://via.placeholder.com/300x400?text=Saree"
                         }
                         alt={product.name}
-                        className="product-image"
+                        className="w-full h-52 md:h-72 object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </Link>
-                    <div className="product-overlay">
+                    {index < 4 && (
+                      <span className="absolute top-3 left-3 bg-[#8B0000] text-white text-xs px-3 py-1 rounded-full font-semibold">
+                        New
+                      </span>
+                    )}
+                    {/* Hover overlay — desktop only */}
+                    <div className="hidden md:flex absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#8B0000]/90 to-transparent p-4 gap-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                       <Link
                         to={`/product/${product.id}`}
-                        className="overlay-btn overlay-btn-view"
+                        className="flex-1 bg-white text-[#8B0000] text-xs font-bold py-2 rounded-lg text-center"
                       >
                         Quick View
                       </Link>
                       <button
-                        className="overlay-btn overlay-btn-cart"
                         onClick={() => handleAddToCart(product)}
+                        className="flex-1 bg-[#C9A84C] text-[#5a0000] text-xs font-bold py-2 rounded-lg"
                       >
                         Add to Cart
                       </button>
                     </div>
                   </div>
-                  <div className="product-body">
+
+                  {/* Body */}
+                  <div className="p-3 md:p-4">
                     <Link to={`/product/${product.id}`}>
-                      <h3 className="product-name">{product.name}</h3>
+                      <h3 className="font-['Playfair_Display'] text-[#8B0000] text-sm md:text-base font-semibold mb-1 line-clamp-1">
+                        {product.name}
+                      </h3>
                     </Link>
-                    <p className="product-desc">
-                      {product.description?.slice(0, 65)}...
+                    <p className="text-gray-400 text-xs mb-2 line-clamp-1 hidden md:block">
+                      {product.description?.slice(0, 50)}...
                     </p>
-                    <div className="product-price-row">
-                      <span className="product-price">
-                        &#8377;{product.price?.toLocaleString()}
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-gray-900 font-bold text-base md:text-lg">
+                        ₹{product.price?.toLocaleString()}
                       </span>
-                      <span className="product-in-stock">&#10003; In Stock</span>
+                      <span className="text-green-600 text-xs font-semibold">
+                        ✓ In Stock
+                      </span>
                     </div>
-                    <div className="product-buttons">
+                    {/* Mobile — always show buttons */}
+                    <div className="flex gap-2 md:hidden">
                       <Link
                         to={`/product/${product.id}`}
-                        className="btn-view"
+                        className="flex-1 border border-[#8B0000] text-[#8B0000] text-xs font-semibold py-2 rounded-lg text-center"
+                      >
+                        View
+                      </Link>
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className="flex-1 bg-[#8B0000] text-white text-xs font-semibold py-2 rounded-lg"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                    {/* Desktop — show buttons too */}
+                    <div className="hidden md:flex gap-2">
+                      <Link
+                        to={`/product/${product.id}`}
+                        className="flex-1 border border-[#8B0000] text-[#8B0000] text-xs font-semibold py-2 rounded-lg text-center hover:bg-[#8B0000] hover:text-white transition-all"
                       >
                         View Details
                       </Link>
                       <button
-                        className="btn-cart"
                         onClick={() => handleAddToCart(product)}
+                        className="flex-1 bg-[#8B0000] text-white text-xs font-semibold py-2 rounded-lg hover:bg-[#5a0000] transition-all"
                       >
                         Add to Cart
                       </button>
@@ -267,133 +312,154 @@ const Home = () => {
       </div>
 
       {/* ===== OCCASIONS ===== */}
-      <div className="section" id="occasions">
-        <div className="section-header">
-          <p className="section-tag">Shop By Occasion</p>
-          <h2 className="section-title">What is the Occasion?</h2>
-          <p className="section-subtitle">
-            We have the perfect saree for every moment
+      <div className="max-w-7xl mx-auto px-4 py-12" id="occasions">
+        <div className="text-center mb-8">
+          <p className="text-[#C9A84C] text-xs font-semibold tracking-[0.2em] uppercase mb-2">
+            Shop By Occasion
           </p>
+          <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-[#8B0000]">
+            What is the Occasion?
+          </h2>
         </div>
-        <div className="occasions-grid">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
           {occasions.map((occ, i) => (
             <div
-              className="occasion-card"
               key={i}
               onClick={() => {
-                setActiveCategory("All");
                 setSearch(occ.name);
-                document.getElementById("collection")?.scrollIntoView({
-                  behavior: "smooth",
-                });
+                setActiveCategory("All");
+                document
+                  .getElementById("collection")
+                  ?.scrollIntoView({ behavior: "smooth" });
               }}
+              className={`bg-gradient-to-br ${occ.bg} rounded-2xl h-32 md:h-44 flex items-center justify-center cursor-pointer hover:scale-105 transition-all duration-300 shadow-md`}
             >
-              <div
-                className="occasion-bg"
-                style={{ background: occ.bg }}
-              >
-                <span className="occasion-name">{occ.name}</span>
-              </div>
+              <span className="text-white font-['Playfair_Display'] text-xl md:text-2xl font-bold tracking-wide">
+                {occ.name}
+              </span>
             </div>
           ))}
         </div>
       </div>
 
       {/* ===== NEWSLETTER ===== */}
-      <div className="newsletter-section">
-        <h2 className="newsletter-title">Join Our Saree Family</h2>
-        <p className="newsletter-subtitle">
+      <div className="bg-gradient-to-br from-[#8B0000] to-[#4a0000] py-16 px-4 text-center text-white">
+        <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl mb-3">
+          Join Our Saree Family
+        </h2>
+        <p className="text-white/75 text-sm mb-8 max-w-md mx-auto">
           Subscribe for exclusive offers, new arrivals and styling tips
         </p>
-        <form className="newsletter-form" onSubmit={handleNewsletter}>
+        <form
+          onSubmit={handleNewsletter}
+          className="flex max-w-md mx-auto overflow-hidden rounded-full shadow-xl"
+        >
           <input
             type="email"
             placeholder="Enter your email address"
-            className="newsletter-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="flex-1 px-6 py-3.5 text-sm outline-none text-gray-800 font-[Poppins]"
             required
           />
-          <button type="submit" className="newsletter-btn">
+          <button
+            type="submit"
+            className="bg-[#C9A84C] text-[#5a0000] px-6 py-3.5 font-bold text-sm whitespace-nowrap hover:bg-[#f0d080] transition-all"
+          >
             Subscribe
           </button>
         </form>
       </div>
 
       {/* ===== FOOTER ===== */}
-      <footer className="footer">
-        <div className="footer-grid">
-          <div>
-            <div className="footer-brand-name">Sudarshana Sarees</div>
-            <p className="footer-brand-desc">
+      <footer className="bg-[#1a0000] text-white/80 pt-12 pb-6 px-4">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 pb-8 border-b border-white/10">
+
+          {/* Brand */}
+          <div className="col-span-2 md:col-span-1">
+            <img
+              src="/logo.png"
+              alt="Sudarshana Sarees"
+              className="h-16 w-auto mb-4"
+            />
+            <p className="text-sm leading-relaxed text-white/60 mb-4">
               Bringing you the finest handpicked sarees from across India.
-              Quality, trust and elegance — delivered to your doorstep.
+              Quality and elegance delivered to your doorstep.
             </p>
-            <div className="footer-social">
+            <div className="flex gap-3">
               {["📘", "📸", "🐦", "▶️"].map((icon, i) => (
-                <button key={i} className="footer-social-btn">
+                <button
+                  key={i}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#C9A84C] hover:text-[#5a0000] flex items-center justify-center transition-all text-sm"
+                >
                   {icon}
                 </button>
               ))}
             </div>
           </div>
 
+          {/* Quick Links */}
           <div>
-            <div className="footer-col-title">Quick Links</div>
-            <div className="footer-links">
-              <Link to="/" className="footer-link">Home</Link>
-              <Link to="/" className="footer-link">Collections</Link>
-              <Link to="/cart" className="footer-link">Cart</Link>
-              <Link to="/login" className="footer-link">Login</Link>
-              <Link to="/signup" className="footer-link">Sign Up</Link>
-            </div>
-          </div>
-
-          <div>
-            <div className="footer-col-title">Categories</div>
-            <div className="footer-links">
-              {categories.filter(c => c !== "All").map((cat, i) => (
-                <span
+            <h4 className="text-[#C9A84C] font-semibold text-sm mb-4 tracking-wide">
+              Quick Links
+            </h4>
+            <div className="flex flex-col gap-2.5">
+              {["Home", "Collections", "Cart", "Login", "Sign Up"].map((item, i) => (
+                <Link
                   key={i}
-                  className="footer-link"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setActiveCategory(cat);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
+                  to={i === 0 ? "/" : i === 2 ? "/cart" : i === 3 ? "/login" : i === 4 ? "/signup" : "/"}
+                  className="text-white/60 text-sm hover:text-[#C9A84C] hover:pl-1 transition-all"
                 >
-                  {cat} Sarees
-                </span>
+                  {item}
+                </Link>
               ))}
             </div>
           </div>
 
+          {/* Categories */}
           <div>
-            <div className="footer-col-title">Contact Us</div>
-            <div className="footer-contact-item">
-              <span>&#128205;</span>
-              <span>Varanasi, Uttar Pradesh, India</span>
+            <h4 className="text-[#C9A84C] font-semibold text-sm mb-4 tracking-wide">
+              Categories
+            </h4>
+            <div className="flex flex-col gap-2.5">
+              {categories.filter(c => c !== "All").map((cat, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="text-white/60 text-sm hover:text-[#C9A84C] hover:pl-1 transition-all text-left"
+                >
+                  {cat} Sarees
+                </button>
+              ))}
             </div>
-            <div className="footer-contact-item">
-              <span>&#128222;</span>
-              <span>+91 79059 07624</span>
-            </div>
-            <div className="footer-contact-item">
-              <span>&#128231;</span>
-              <span>hello@sudarshanasarees.com</span>
-            </div>
-            <div className="footer-contact-item">
-              <span>&#9200;</span>
-              <span>Mon-Sat: 9AM - 8PM</span>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-[#C9A84C] font-semibold text-sm mb-4 tracking-wide">
+              Contact Us
+            </h4>
+            <div className="flex flex-col gap-3">
+              {[
+                { icon: "📍", text: "Varanasi, Uttar Pradesh, India" },
+                { icon: "📞", text: "+91 79059 07624" },
+                { icon: "📧", text: "hello@sudarshanasarees.com" },
+                { icon: "🕐", text: "Mon-Sat: 9AM - 8PM" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-2.5 text-sm text-white/60">
+                  <span className="flex-shrink-0">{item.icon}</span>
+                  <span>{item.text}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="footer-bottom">
-          <p>
-            &copy; 2025 Sudarshana Sarees. All rights reserved.
-            Made with love in India.
-          </p>
+        <div className="text-center pt-6 text-white/30 text-xs">
+          &copy; 2025 Sudarshana Sarees. All rights reserved. Made with love in India.
         </div>
       </footer>
 
@@ -402,10 +468,10 @@ const Home = () => {
         href="https://wa.me/917905907624"
         target="_blank"
         rel="noopener noreferrer"
-        className="whatsapp-btn"
-        title="Chat with us on WhatsApp"
+        className="fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-lg hover:scale-110 transition-all z-50"
+        title="Chat on WhatsApp"
       >
-        &#128172;
+        💬
       </a>
     </div>
   );
