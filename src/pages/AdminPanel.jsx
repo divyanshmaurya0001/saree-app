@@ -183,15 +183,22 @@ const AdminPanel = () => {
             All Products ({products.length})
           </button>
           <button
-            onClick={() => { setActiveTab("add"); setShowForm(true); resetForm(); }}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === "add"
-                ? "bg-[#8B0000] text-white"
-                : "bg-white text-gray-600 hover:bg-gray-100"
-            }`}
-          >
-            + Add New Saree
-          </button>
+  onClick={() => {
+    setActiveTab("add");
+    setShowForm(true);
+    setForm({ name: "", price: "", description: "", images: [] });
+    setImageFiles([]);
+    setPreviewUrls([]);
+    setEditingId(null);
+  }}
+  className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+    activeTab === "add"
+      ? "bg-[#8B0000] text-white"
+      : "bg-white text-gray-600 hover:bg-gray-100"
+  }`}
+>
+  + Add New Saree
+</button>
         </div>
 
         {/* Add/Edit Form */}
